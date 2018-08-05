@@ -21,11 +21,22 @@ const party = [{
 }];
 */
 
-const renderParty = function(playerList){
+const renderParty = (playerList) => {
 //    let numbers = [{val: 7}, {val: 2}, {val: 2}];
 
-    let newplayers = playerList.map(function (player) {
-        return <p key={player._id}>{player.name} has a score of {player.score} point(s).</p>;
+    let newplayers = playerList.map((player) => {
+        return (
+            <p key={player._id}>
+                {player.name} has a score of {player.score} point(s).
+                <button onClick={() => {
+                    Players.update(player._id, {$inc: {score: 1}})
+                }}>+1</button>
+                <button onClick={() => {
+                    Players.update(player._id, {$inc: {score: -1}})
+                }}>-1</button>
+                <button onClick={() => {Players.remove(player._id)}}>X</button>
+            </p>
+        );
     });
     return newplayers;
 };
@@ -36,7 +47,7 @@ const renderParty = function(){
 };
 */
 
-const handleSubmit = function(e){
+const handleSubmit = (e) => {
     e.preventDefault();
     let playerName=e.target.playerName.value;
     if(playerName){
@@ -48,8 +59,8 @@ const handleSubmit = function(e){
     }
 };
 
-Meteor.startup(function () {
-    Tracker.autorun(function(){
+Meteor.startup(() => {
+    Tracker.autorun(() => {
         let players = Players.find().fetch();
         let title = 'Score Keep';
         let name = 'John Doe';
@@ -66,9 +77,11 @@ Meteor.startup(function () {
             </div>
         );
         ReactDOM.render(jsx, document.getElementById("app"));
-    });
-/*    Players.insert({
+    });//END autorun
+
+    /*    Players.insert({
         name: 'Jane',
         score: 30
     });*/
-});
+
+});//END startup
